@@ -1,38 +1,3 @@
-/**
- * escalonador.c
- *
- * Projeto pratico TT304 - Sistemas Operacionais
- * Escalonador de tarefas com pool de threads, fila de prioridade limitada
- * (bounded buffer) e memoria dinamica.
- *
- * Modelo: 1 thread produtor + N threads consumidores (o "pool") + thread
- * principal. O produtor le "id tempo" de um arquivo texto e enfileira tarefas;
- * os consumidores retiram sempre a tarefa de MENOR tempo de execucao
- * (maior prioridade; empate = ordem de chegada, FIFO) e simulam o trabalho
- * com sleep().
- *
- * Primitivas reaproveitadas do laboratorio da disciplina:
- *   - pthread_create / pthread_join / pthread_exit / pthread_self (cap. 7)
- *   - passagem de parametros por estrutura alocada com malloc (cap. 7.4)
- *   - retorno de thread por ponteiro alocado com malloc (cap. 7.5,
- *     identico ao *soma de mediaThreads.c)
- *   - problema produtor/consumidor com buffer limitado (cap. 8.2). Aqui o
- *     controle "vazio/cheio" dos semaforos do lab foi trocado por variaveis
- *     de condicao + mutex, como exige o enunciado.
- *   - tratamento de erro com fprintf(stderr, ...) + exit(EXIT_FAILURE)
- *
- * Para compilar:
- *   gcc -std=gnu11 -Wall -Wextra -O2 -pthread escalonador.c -o escalonador
- *   (ou simplesmente: make)
- *
- * Para executar:
- *   ./escalonador <N consumidores> <arquivo de entrada>
- *   ex.: ./escalonador 3 tarefas.txt
- *
- * Regra do enunciado: NENHUMA estrutura composta (vetor, matriz, struct) e
- * alocada estaticamente. Por isso nao ha variaveis globais nem vetores/structs
- * na pilha: tudo vive no heap e e passado entre threads por ponteiro.
- */
 #define _POSIX_C_SOURCE 200809L
 
 #include <stdio.h>
